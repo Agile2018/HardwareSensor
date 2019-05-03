@@ -157,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ASSCentralProcessingVideo.h" />
+    <ClInclude Include="ASSCheckHardware.h" />
     <ClInclude Include="ASSFaceCodes.h" />
     <ClInclude Include="ASSFaceDetect.h" />
     <ClInclude Include="ASSFaceEither.h" />
@@ -164,6 +166,7 @@
     <ClInclude Include="ASSVideoCapture.h" />
     <ClInclude Include="ASSVideoConfig.h" />
     <ClInclude Include="Disk.h" />
+    <ClInclude Include="Format.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Lot.h" />
     <ClInclude Include="ManageFile.h" />
@@ -173,12 +176,15 @@
     <ClInclude Include="Processor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ASSCentralProcessingVideo.cpp" />
+    <ClCompile Include="ASSCheckHardware.cpp" />
     <ClCompile Include="ASSFaceDetect.cpp" />
     <ClCompile Include="ASSFaceEither.cpp" />
     <ClCompile Include="ASSFaceError.cpp" />
     <ClCompile Include="ASSVideoCapture.cpp" />
     <ClCompile Include="ASSVideoConfig.cpp" />
     <ClCompile Include="Disk.cpp" />
+    <ClCompile Include="Format.cpp" />
     <ClCompile Include="HardwareSensor.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Lot.cpp" />

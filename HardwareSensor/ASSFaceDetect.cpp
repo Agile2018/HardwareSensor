@@ -126,35 +126,35 @@ void ASSFaceDetect::Init() {
 
 }
 
-void ASSFaceDetect::CreateHandlerParams() {
-	int errorCode;
-	errorCode = IFACE_CreateFaceHandler(&faceHandler);
-	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
-}
+//void ASSFaceDetect::CreateHandlerParams() {
+//	int errorCode;
+//	errorCode = IFACE_CreateFaceHandler(&faceHandler);
+//	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
+//}
 
 void ASSFaceDetect::SetMaxDetect(int max) {
 	_maxDetect = max;
 }
 
-void ASSFaceDetect::SetHandlerParams() {
-	int errorCode;
-	errorCode = IFACE_SetParam(faceHandler, IFACE_PARAMETER_FACEDET_SPEED_ACCURACY_MODE,
-		IFACE_FACEDET_SPEED_ACCURACY_MODE_DEFAULT);
-	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
-}
+//void ASSFaceDetect::SetHandlerParams() {
+//	int errorCode;
+//	errorCode = IFACE_SetParam(faceHandler, IFACE_PARAMETER_FACEDET_SPEED_ACCURACY_MODE,
+//		IFACE_FACEDET_SPEED_ACCURACY_MODE_DEFAULT);
+//	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
+//}
 
 void ASSFaceDetect::Terminate() {
 	int errorCode = IFACE_Terminate();
 	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);
 }
 
-void ASSFaceDetect::Start() {
-
-	CreateHandlerParams();
-
-	SetHandlerParams();
-
-}
+//void ASSFaceDetect::Start() {
+//
+//	CreateHandlerParams();
+//
+//	SetHandlerParams();
+//
+//}
 
 void ASSFaceDetect::resetCountBatch() {
 	_countBatch = 0;
@@ -164,62 +164,62 @@ void ASSFaceDetect::SetFileImage(string strFileImage) {
 	_strFileImage = strFileImage;
 }
 
-void ASSFaceDetect::LoadImageFromMemory(const char* imgData, int size) {
-
-	int errorCode, lenght,  width, height;
-
-	try
-	{
-		std::cout << "IMAGE SIZE IFACE: " << imageSize << std::endl;
-
-		const char* imgBuffer = reinterpret_cast<const char*>(rawImageFrame);
-		std::cout << "PASE CAST " << std::endl;
-		if (imgBuffer != NULL)
-		{
-			std::cout << "CAST SIZE " << (unsigned)strlen(imgBuffer) << std::endl;
-			errorCode = IFACE_LoadImageFromMemory(imgBuffer, imageSize, &width,
-				&height, &lenght, rawImageData);
-			if (errorCode != IFACE_OK) {
-				aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
-			}
-
-		}
-		else
-		{
-			std::cout << "PASE CAST NULL " << std::endl;
-		}
-
-
-	}
-	catch (const std::exception& ex)
-	{
-		std::cout << ex.what() << std::endl;
-	}
-}
-
-void ASSFaceDetect::SaveImageToMemory(unsigned char* rawImage, int rawWidth, int rawHeight) {
-
-	int errorCode;
-
-	try
-	{
-		int length = (unsigned)strlen((char*)rawImage);
-		rawImageFrame = new unsigned char[length];
-		errorCode = IFACE_SaveImageToMemory(rawImage, rawWidth, rawHeight,
-			3, IFACE_IMAGE_SAVE_TYPE_JPG, &imageSize, rawImageFrame);
-
-		std::cout << rawImageFrame << std::endl;
-
-		if (errorCode != IFACE_OK) {
-			aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
-		}
-
-	}
-	catch (const std::exception& ex)
-	{
-		std::cout << ex.what() << std::endl;
-	}
-}
+//void ASSFaceDetect::LoadImageFromMemory(const char* imgData, int size) {
+//
+//	int errorCode, lenght,  width, height;
+//
+//	try
+//	{
+//		std::cout << "IMAGE SIZE IFACE: " << imageSize << std::endl;
+//
+//		const char* imgBuffer = reinterpret_cast<const char*>(rawImageFrame);
+//		std::cout << "PASE CAST " << std::endl;
+//		if (imgBuffer != NULL)
+//		{
+//			std::cout << "CAST SIZE " << (unsigned)strlen(imgBuffer) << std::endl;
+//			errorCode = IFACE_LoadImageFromMemory(imgBuffer, imageSize, &width,
+//				&height, &lenght, rawImageData);
+//			if (errorCode != IFACE_OK) {
+//				aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
+//			}
+//
+//		}
+//		else
+//		{
+//			std::cout << "PASE CAST NULL " << std::endl;
+//		}
+//
+//
+//	}
+//	catch (const std::exception& ex)
+//	{
+//		std::cout << ex.what() << std::endl;
+//	}
+//}
+//
+//void ASSFaceDetect::SaveImageToMemory(unsigned char* rawImage, int rawWidth, int rawHeight) {
+//
+//	int errorCode;
+//
+//	try
+//	{
+//		int length = (unsigned)strlen((char*)rawImage);
+//		rawImageFrame = new unsigned char[length];
+//		errorCode = IFACE_SaveImageToMemory(rawImage, rawWidth, rawHeight,
+//			3, IFACE_IMAGE_SAVE_TYPE_JPG, &imageSize, rawImageFrame);
+//
+//		std::cout << rawImageFrame << std::endl;
+//
+//		if (errorCode != IFACE_OK) {
+//			aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
+//		}
+//
+//	}
+//	catch (const std::exception& ex)
+//	{
+//		std::cout << ex.what() << std::endl;
+//	}
+//}
 
 int ASSFaceDetect::ProccessDetectBatch() {
 	int errorCode, countDetect = 0;
@@ -385,10 +385,10 @@ void ASSFaceDetect::GetModelBatch(int countDetect, void* facesDetect[BATCH_SIZE]
 	if (errorCode != IFACE_OK) {
 		aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);
 	}
-	for (int i = 0; i < countDetect; i++)
+	/*for (int i = 0; i < countDetect; i++)
 	{
 		templateOut.on_next(batchTemplates[i]);
-	}
+	}*/
 
 	for (int i = 0; i < BATCH_SIZE; ++i)
 	{
@@ -494,7 +494,7 @@ int ASSFaceDetect::CreateTemplate(void* face) {
 		}
 		else
 		{
-			templateOut.on_next(templateData);
+			//templateOut.on_next(templateData);
 			
 			errorCode = IFACE_GetTemplateInfo(faceHandler, templateData, &majorVersion0, &minorVersion0, &quality0);
 			std::cout << "First template version: " << majorVersion0 << "." << minorVersion0 << ", quality: " << quality0
@@ -511,9 +511,9 @@ int ASSFaceDetect::CreateTemplate(void* face) {
 }
 
 void ASSFaceDetect::Release() {
-	int errorCode;
+	/*int errorCode;
 	errorCode = IFACE_ReleaseEntity(faceHandler);
-	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
+	aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);*/
 	delete[] rawImageData;
 
 
