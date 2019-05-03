@@ -1,6 +1,8 @@
 #ifndef Processor_h
 #define Processor_h
-
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
 class Processor
 {
 public:
@@ -8,8 +10,11 @@ public:
 	~Processor();
 	void SetConsumption(int consumption);
 	int GetConsumption();
+	void SetDescription(string description);
+	string GetDescription();
 private:
 	int _consumption;
+	string _description;
 };
 
 #endif // !Processor_h

@@ -18,3 +18,14 @@ int Processor::GetConsumption()
 	return _consumption;
 }
 
+void Processor::SetDescription(string description)
+{
+	_description = description;
+}
+
+string Processor::GetDescription()
+{
+	return _description;
+}
+
+

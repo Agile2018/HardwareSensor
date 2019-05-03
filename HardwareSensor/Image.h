@@ -12,12 +12,13 @@ public:
 	double GetTimeOfDetection();
 	int GetNumberOfFaces();
 	double GetTimeOfTemplate();
-
+	void SetQualityTemplate(int quality);
+	int GetQualityTemplate();
 private:
 	double _timeOfDetection;
 	int _numberOfFaces;
 	double _timeOfTemplate;
-
+	int _qualityTemplate;
 };
 
 

@@ -37,3 +37,14 @@ int Image::GetNumberOfFaces()
 {
 	return _numberOfFaces;
 }
+
+void Image::SetQualityTemplate(int quality)
+{
+	_qualityTemplate = quality;
+}
+
+int Image::GetQualityTemplate()
+{
+	return _qualityTemplate;
+}
+
