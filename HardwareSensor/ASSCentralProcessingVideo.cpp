@@ -26,6 +26,24 @@ void ASSCentralProcessingVideo::ObserverError()
 	});
 }
 
+void ASSCentralProcessingVideo::SetTimeLogs() {
+	string date = GetTimeInitProcess();
+	manageLogHardware->WriteFile(date);
+	aSSFaceDetect->InitDateLogs(date);
+}
+
+string ASSCentralProcessingVideo::GetTimeInitProcess() {
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	string date = format->FormatString("INIT LOG UTC: %s\n",
+		asctime(timeinfo));
+	return date;
+}
+
 void ASSCentralProcessingVideo::SaveDataHardwareConsumption() {
 	std::time_t t = std::time(nullptr);
 	tm *ltm = std::localtime(&t);
@@ -40,31 +58,6 @@ void ASSCentralProcessingVideo::SaveDataHardwareConsumption() {
 
 }
 
-//int ASSCentralProcessingVideo::SetStateFlow(int day, int minute) {
-//	int quantity = aSSFlowTrend->GetFlowTrendForMinute(day, minute - 10);
-//	aSSVideoCapture->resetCountBatch();
-//	aSSFaceDetect->resetCountBatch();
-//	if (timeDurationSingle != 0.0)
-//	{
-//		int imagesWait = (60 / timeDurationSingle) / 2;
-//		
-//		if (quantity > imagesWait)
-//		{
-//
-//			return 1;
-//		}
-//		if (quantity <= imagesWait && quantity != 0)
-//		{
-//			return 2;
-//		}
-//		else
-//		{
-//			return 3;
-//		}
-//
-//	}
-//	return 1;
-//}
 
 void ASSCentralProcessingVideo::RefreshData() {
 	std::chrono::steady_clock::time_point endCountFacesDetected = std::chrono::steady_clock::now();
@@ -106,26 +99,17 @@ void ASSCentralProcessingVideo::BatchDetection(Mat image) {
 void ASSCentralProcessingVideo::DetectFaces(Mat image) {
 	
 	RefreshData();
-
+	
 	switch (optionProcess)
 	{
 	case 1:
 		SingleDetection(image);
-		cout << "SINGLE DETECTION" << endl;
+		//cout << "SINGLE DETECTION" << endl;
 		break;
 	case 2:
 		BatchDetection(image);
-		cout << "BATCH DETECTION" << endl;
+		//cout << "BATCH DETECTION" << endl;
 		break;
-	/*case 3:
-		if (aSSDetectMovement->SetImage(image))
-		{
-			if (aSSDetectMovement->Process()) {
-				optionProcess = 1;
-			}
-			cout << "MOVEMENT DETECTION" << endl;
-		}
-		break;*/
 	default:
 		break;
 	}
@@ -158,6 +142,8 @@ void ASSCentralProcessingVideo::RunProcessVideo() {
 
 
 	});
+
+	SetTimeLogs();
 	
 	aSSVideoCapture->processVideo();
 
@@ -173,16 +159,26 @@ void ASSCentralProcessingVideo::SetDirectory(string directory) {
 	aSSFaceDetect->SetDirectory(_directory);
 }
 
-void ASSCentralProcessingVideo::SetOptionProcessor(int option) {
+void ASSCentralProcessingVideo::SetOptionDetection(int option) {
 
 	optionProcess = option;
 
 }
 
 void ASSCentralProcessingVideo::SaveDetailsHardware() {
+	string date = GetTimeInitProcess();
+	manageDetailProcessor->WriteFile(date);
 	string cpuDetail = aSSCheckHardware->SysInfoCpu();
-
-	manageDetailProcessor->WriteFile(cpuDetail);
+	
+	if (aSSCuda->isExistCuda()) {
+		cout << "CUDA EXISTS" << endl;
+	}
+	string gpuDetail = aSSCuda->GetDescripton();
+	
+	string detailDisk = aSSCheckHardware->SysInfoDisk();
+	
+	string logData = cpuDetail + "\n" + gpuDetail + "\n" + detailDisk + "\n";
+	manageDetailProcessor->WriteFile(logData);
 }
 
 //void ASSCentralProcessingVideo::ObserverTemplate() {

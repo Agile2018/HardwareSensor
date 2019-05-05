@@ -66,6 +66,15 @@
     <ClInclude Include="ASSCentralProcessingVideo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ASSCuda.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ASSInitLibRecognition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InitHardwareSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -117,6 +126,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ASSCentralProcessingVideo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ASSCuda.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ASSInitLibRecognition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InitHardwareSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

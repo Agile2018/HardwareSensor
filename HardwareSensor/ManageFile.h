@@ -15,9 +15,9 @@ public:
 	~ManageFile();
 	void SetNameDirectory(string name);
 	void SetNameFile(string name);
-	bool WriteFile(string content);
-	bool DeleteFile();
-	bool CreateDirectory();
+	void WriteFile(string content);
+	bool DeleteFileLog();
+	void CreateDirectoryVideo();
 private:
 	string _nameDirectory;
 	string _nameFile;

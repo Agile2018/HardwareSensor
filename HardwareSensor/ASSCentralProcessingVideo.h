@@ -8,6 +8,10 @@
 #include "ASSFaceDetect.h"
 #include "ASSFaceEither.h"
 #include "ASSVideoConfig.h"
+#include "ASSCuda.h"
+#include <ctime>
+#include <iomanip>
+#include <stdlib.h>
 
 const string LOG_HARDWARE_CONSUMPTION = "log_hardware_consumption.txt";
 const string LOG_INFO_PROCESSOR = "log_processor.txt";
@@ -21,20 +25,21 @@ public:
 	ASSVideoConfig* aSSVideoConfig = new ASSVideoConfig();
 	void RunProcessVideo();
 	void SetDirectory(string directory);
-	void SetOptionProcessor(int option);
+	void SetOptionDetection(int option);
 	void SaveDetailsHardware();
-	//Mat matImage;
-	/*Rx::subject<char*> templateImage;
-	Rx::observable<char*> observableTemplate = templateImage.get_observable();*/
 	Rx::subject<Mat> frame;
 	Rx::observable<Mat> observableFrame = frame.get_observable();
 private:
+	ASSCuda* aSSCuda = new ASSCuda();
 	ASSCheckHardware* aSSCheckHardware = new ASSCheckHardware();
 	ManageFile* manageLogHardware = new ManageFile();
 	ManageFile* manageDetailProcessor = new ManageFile();
+	Format* format = new Format();
 	//Rx::subscriber<char*> templateOut = templateImage.get_subscriber();
 	Rx::subscriber<Mat> frameOut = frame.get_subscriber();
 	void ObserverError();
+	string GetTimeInitProcess();
+	void SetTimeLogs();
 	//void ObserverTemplate();
 	//void InitParamsDetect();	
 	void SaveDataHardwareConsumption();

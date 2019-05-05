@@ -99,17 +99,141 @@ string ASSCheckHardware::SysInfoCpu() {
 	GetSystemInfo(&siSysInfo);
 
 	// Display the contents of the SYSTEM_INFO structure. 
-	string head = format->FormatString("Hardware information: \n");
-	string oem = format->FormatString("OEM ID : %u\n", siSysInfo.dwOemId);
-	string processors = format->FormatString("Number of processors: %u\n",
+	description += format->FormatString("Hardware information: \n");
+	description += format->FormatString("OEM ID : %u\n", siSysInfo.dwOemId);
+	description += format->FormatString("Processor Architecture : %u\n", siSysInfo.wProcessorArchitecture);
+	description += format->FormatString("Number of processors: %u\n",
 		siSysInfo.dwNumberOfProcessors);
-	string page = format->FormatString("Page size: %u\n", siSysInfo.dwPageSize);
-	string type = format->FormatString("Processor type: %u\n", siSysInfo.dwProcessorType);
-	string minimum = format->FormatString("Minimum application address: %lx\n",
+	description += format->FormatString("Page size: %u\n", siSysInfo.dwPageSize);
+	description += format->FormatString("Processor type: %u\n", siSysInfo.dwProcessorType);
+	description += format->FormatString("Minimum application address: %lx\n",
 		siSysInfo.lpMinimumApplicationAddress);
-	string maximum = format->FormatString("Maximum application address: %lx\n",
+	description += format->FormatString("Maximum application address: %lx\n",
 		siSysInfo.lpMaximumApplicationAddress);
-	string active = format->FormatString("Active processor mask: %u\n",
+	description += format->FormatString("Active processor mask: %u\n",
 		siSysInfo.dwActiveProcessorMask);
-	return head + oem + processors + page + type + minimum + maximum + active;
+	
+	//cout << "CPU: " << description << endl;
+	return description;
+}
+
+string ASSCheckHardware::SysInfoDisk() {
+	string detailDisk;
+
+	BOOL  fResult;
+
+	char  *pszDrive = NULL,
+		szDrive[4];
+
+	DWORD dwSectPerClust,
+		dwBytesPerSect,
+		dwFreeClusters,
+		dwTotalClusters;
+
+	P_GDFSE pGetDiskFreeSpaceEx = NULL;
+
+	unsigned __int64 i64FreeBytesToCaller,
+		i64TotalBytes,
+		i64FreeBytes;
+
+	/*
+	   Command line parsing.
+
+	   If the drive is a drive letter and not a UNC path, append a
+	   trailing backslash to the drive letter and colon.  This is
+	   required on Windows 95 and 98.
+	*/
+	/*if (argc != 2)
+	{
+		printf("usage:  %s <drive|UNC path>\n", argv[0]);
+		printf("\texample:  %s C:\\\n", argv[0]);
+		return;
+	}*/
+	char argv[] = { 'C', ':' };
+
+	pszDrive = argv;
+
+	if (pszDrive[1] == ':')
+	{
+		szDrive[0] = pszDrive[0];
+		szDrive[1] = ':';
+		szDrive[2] = '\\';
+		szDrive[3] = '\0';
+
+		pszDrive = szDrive;
+	}
+
+	/*
+	   Use GetDiskFreeSpaceEx if available; otherwise, use
+	   GetDiskFreeSpace.
+
+	   Note: Since GetDiskFreeSpaceEx is not in Windows 95 Retail, we
+	   dynamically link to it and only call it if it is present.  We
+	   don't need to call LoadLibrary on KERNEL32.DLL because it is
+	   already loaded into every Win32 process's address space.
+	*/
+	pGetDiskFreeSpaceEx = (P_GDFSE)GetProcAddress(
+		GetModuleHandleW(L"kernel32.dll"),
+		"GetDiskFreeSpaceExA");
+	if (pGetDiskFreeSpaceEx)
+	{
+		fResult = pGetDiskFreeSpaceEx((LPCWSTR)pszDrive,
+			(PULARGE_INTEGER)&i64FreeBytesToCaller,
+			(PULARGE_INTEGER)&i64TotalBytes,
+			(PULARGE_INTEGER)&i64FreeBytes);
+		if (fResult)
+		{
+			detailDisk = format->FormatString("\n\nGetDiskFreeSpaceEx reports\n\n");
+			//printf("\n\nGetDiskFreeSpaceEx reports\n\n");
+			detailDisk += format->FormatString("Available space to caller = %I64u MB\n",
+				i64FreeBytesToCaller / (1024 * 1024));
+
+			//printf("Available space to caller = %I64u MB\n",
+			//	i64FreeBytesToCaller / (1024 * 1024));
+			detailDisk += format->FormatString("Total space = %I64u MB\n",
+				i64TotalBytes / (1024 * 1024));
+
+			//printf("Total space               = %I64u MB\n",
+			//	i64TotalBytes / (1024 * 1024));
+			detailDisk += format->FormatString("Free space on drive = %I64u MB\n",
+				i64FreeBytes / (1024 * 1024));
+
+			//printf("Free space on drive       = %I64u MB\n",
+			//	i64FreeBytes / (1024 * 1024));
+		}
+	}
+	else
+	{
+		fResult = GetDiskFreeSpace((LPCWSTR)pszDrive,
+			&dwSectPerClust,
+			&dwBytesPerSect,
+			&dwFreeClusters,
+			&dwTotalClusters);
+		if (fResult)
+		{
+			/* force 64-bit math */
+			i64TotalBytes = (__int64)dwTotalClusters * dwSectPerClust *
+				dwBytesPerSect;
+			i64FreeBytes = (__int64)dwFreeClusters * dwSectPerClust *
+				dwBytesPerSect;
+
+			//printf("GetDiskFreeSpace reports\n\n");
+			detailDisk += format->FormatString("Free space  = %I64u MB\n",
+				i64FreeBytes / (1024 * 1024));
+
+			//printf("Free space  = %I64u MB\n",
+			//	i64FreeBytes / (1024 * 1024));
+			detailDisk += format->FormatString("Total space = %I64u MB\n",
+				i64TotalBytes / (1024 * 1024));
+
+			//printf("Total space = %I64u MB\n",
+			//	i64TotalBytes / (1024 * 1024));
+		}
+	}
+
+	//if (!fResult)
+	//	printf("error: %lu:  could not get free space for \"%s\"\n",
+	//		GetLastError(), argv[1]);
+	//cout << "DISK: " << detailDisk << endl;
+	return detailDisk;
 }

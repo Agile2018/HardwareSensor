@@ -12,6 +12,7 @@
 #include <iostream> 
 #include <fstream> 
 
+
 const string FILE_ERROR = "error.txt";
 const string LOG_DETECTION_SIMPLE = "log_detection_simple.txt";
 const string LOG_DETECTION_BATCH = "log_detection_batch.txt";
@@ -49,6 +50,7 @@ public:
 	void SetFileConfiguration(string file);
 	unsigned char* rawImageData;
 	void setJsonConfig();
+	void InitDateLogs(string date);
 	void SendError(string error);
 	void SetDirectory(string directory);
 	Rx::subject<string> errorFace;

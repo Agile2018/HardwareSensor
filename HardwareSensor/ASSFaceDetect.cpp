@@ -400,15 +400,23 @@ void ASSFaceDetect::GetModelBatch(int countDetect, void* facesDetect[BATCH_SIZE]
 		aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
 	}
 	lot->SetNumberOfFaces(countDetect);
-	std::thread(&ASSFaceDetect::SaveDataBatchDetect, this,
-		lot).detach();
+	if (countDetect != 0)
+	{
+		std::thread(&ASSFaceDetect::SaveDataBatchDetect, this,
+			lot).detach();
+
+	}
 
 }
 
 
 void ASSFaceDetect::SaveDataBatchDetect(Lot* detailLot) {
-	string content = to_string(detailLot->GetNumberOfFaces()) + "," +
-		to_string(detailLot->GetTimeOfTemplate()) + "\n";
+	std::stringstream concat;
+	concat << detailLot->GetNumberOfFaces() << "," << detailLot->GetTimeOfTemplate() << endl;
+	std::string content = concat.str();
+	
+	/*string content = to_string(detailLot->GetNumberOfFaces()) + "," +
+		to_string(detailLot->GetTimeOfTemplate()) + "\n";*/
 	manageLogBachDetection->WriteFile(content);
 }
 
@@ -459,18 +467,32 @@ int ASSFaceDetect::GetModel(unsigned char* rawImage, int width, int height) {
 		aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::out);
 	}
 	detailsOfMeasure->SetNumberOfFaces(detectedFaces);
-	std::thread(&ASSFaceDetect::SaveDataMeasure, this,
-		detailsOfMeasure).detach();
+	if (detectedFaces != 0) {
+		std::thread(&ASSFaceDetect::SaveDataMeasure, this,
+			detailsOfMeasure).detach();
+
+	}
 
 	return detectedFaces;
 }
 
 void ASSFaceDetect::SaveDataMeasure(Image* detailImage) {
-	string content = to_string(detailImage->GetNumberOfFaces()) + "," +
+	std::stringstream concat;
+	concat << detailImage->GetNumberOfFaces() << "," << detailImage->GetTimeOfDetection() 
+		<< "," << detailImage->GetTimeOfTemplate() << "," << detailImage->GetQualityTemplate() << endl;
+	std::string content = concat.str();
+	/*string content = to_string(detailImage->GetNumberOfFaces()) + "," +
 		to_string(detailImage->GetTimeOfDetection()) + "," +
 		to_string(detailImage->GetTimeOfTemplate()) + "," +
-		to_string(detailImage->GetQualityTemplate()) + "\n";
+		to_string(detailImage->GetQualityTemplate()) + "\n";*/
+	//cout << "SAVE DETEC SIMPLE: " << content << endl;
 	manageLogDetailImage->WriteFile(content);
+}
+
+void ASSFaceDetect::InitDateLogs(string date) {
+	manageFileError->WriteFile(date);
+	manageLogDetailImage->WriteFile(date);
+	manageLogBachDetection->WriteFile(date);
 }
 
 int ASSFaceDetect::CreateTemplate(void* face) {
@@ -497,8 +519,7 @@ int ASSFaceDetect::CreateTemplate(void* face) {
 			//templateOut.on_next(templateData);
 			
 			errorCode = IFACE_GetTemplateInfo(faceHandler, templateData, &majorVersion0, &minorVersion0, &quality0);
-			std::cout << "First template version: " << majorVersion0 << "." << minorVersion0 << ", quality: " << quality0
-				<< endl;
+			aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);
 		}
 		delete[] templateData;
 	}
