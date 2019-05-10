@@ -176,8 +176,10 @@ void ASSCentralProcessingVideo::SaveDetailsHardware() {
 	string gpuDetail = aSSCuda->GetDescripton();
 	
 	string detailDisk = aSSCheckHardware->SysInfoDisk();
+	string sdk = format->FormatString("--------------------------------------\n");
+	sdk += format->FormatString("INNOVATRICS LIBRARY SDK: %s\n", aSSFaceDetect->Version());
 	
-	string logData = cpuDetail + "\n" + gpuDetail + "\n" + detailDisk + "\n";
+	string logData = cpuDetail + "\n" + gpuDetail + "\n" + detailDisk + "\n" + sdk + "\n";
 	manageDetailProcessor->WriteFile(logData);
 }
 

@@ -137,8 +137,11 @@ bool ASSVideoCapture::isPositiveInteger(string &device) {
 
 
 bool ASSVideoCapture::searchProtocol(string &device) {
-	string word = "http://";
-	if (device.find(word) == string::npos) {
+	string http = "http://";
+	string rtsp = "rtsp://";
+
+	if (device.find(http) == string::npos && device.find(rtsp) == string::npos) {
+				
 		return false;
 	}
 	else {
@@ -147,10 +150,26 @@ bool ASSVideoCapture::searchProtocol(string &device) {
 }
 
 string ASSVideoCapture::buildUrl(string device) {
+	string url;
+	string protocol = device.substr(0, 7);
+	
 	device.replace(0, 7, "");
-	string url = "http://" + _asvideoConfig->getUser() + ":" +
-		_asvideoConfig->getPassword() + "@" +
-		device + "/axis-cgi/mjpg/video.cgi?resolution=" +
-		_asvideoConfig->getResolution() + "&req_fps=30&.mjpg";
+	if (protocol == "http://")
+	{
+		url = protocol + _asvideoConfig->getUser() + ":" +
+			_asvideoConfig->getPassword() + "@" +
+			device + "/axis-cgi/mjpg/video.cgi?resolution=" +
+			_asvideoConfig->getResolution() + "&req_fps=30&.mjpg";
+
+	}
+	if (protocol == "rtsp://")
+	{
+		url = protocol + _asvideoConfig->getUser() + ":" +
+			_asvideoConfig->getPassword() + "@" +
+			device;
+
+	}
+
+	
 	return url;
 }

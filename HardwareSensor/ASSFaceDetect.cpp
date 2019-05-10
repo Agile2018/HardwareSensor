@@ -10,6 +10,7 @@ ASSFaceDetect::ASSFaceDetect()
 
 ASSFaceDetect::~ASSFaceDetect()
 {
+	Terminate();
 }
 
 void ASSFaceDetect::ObserverError()

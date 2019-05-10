@@ -15,7 +15,8 @@ string ASSCuda::GetDescripton()
 
 
 bool ASSCuda::isExistCuda() {
-	description = format->FormatString(" CUDA Device Query (Runtime API) version (CUDART static linking)\n\n");
+	description = format->FormatString("-----------------------------------------\n");
+	description += format->FormatString("CUDA HARDWARE REPORT\n");
 
 	//printf(
 	//	" CUDA Device Query (Runtime API) version (CUDART static linking)\n\n");

@@ -99,7 +99,7 @@ string ASSCheckHardware::SysInfoCpu() {
 	GetSystemInfo(&siSysInfo);
 
 	// Display the contents of the SYSTEM_INFO structure. 
-	description += format->FormatString("Hardware information: \n");
+	description += format->FormatString("CPU HARDWARE REPORT: \n");
 	description += format->FormatString("OEM ID : %u\n", siSysInfo.dwOemId);
 	description += format->FormatString("Processor Architecture : %u\n", siSysInfo.wProcessorArchitecture);
 	description += format->FormatString("Number of processors: %u\n",
@@ -183,7 +183,8 @@ string ASSCheckHardware::SysInfoDisk() {
 			(PULARGE_INTEGER)&i64FreeBytes);
 		if (fResult)
 		{
-			detailDisk = format->FormatString("\n\nGetDiskFreeSpaceEx reports\n\n");
+			detailDisk = format->FormatString("-----------------------------------------\n");
+			detailDisk += format->FormatString("HARD DRIVE REPORT\n");
 			//printf("\n\nGetDiskFreeSpaceEx reports\n\n");
 			detailDisk += format->FormatString("Available space to caller = %I64u MB\n",
 				i64FreeBytesToCaller / (1024 * 1024));
