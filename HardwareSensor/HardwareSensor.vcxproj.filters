@@ -75,6 +75,15 @@
     <ClInclude Include="InitHardwareSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ASSModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ASSFaceIdentify.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Identification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -135,6 +144,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InitHardwareSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ASSModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ASSFaceIdentify.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Identification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

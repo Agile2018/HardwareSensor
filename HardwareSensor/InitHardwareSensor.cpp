@@ -19,11 +19,20 @@ InitHardwareSensor::InitHardwareSensor(int detection, int cpu)
 	{
 		cout << "CUDA NOT SELECTED" << endl;
 	}
+	else
+	{
+		cout << "CUDA SELECTED" << endl;
+	}
 
 }
 
 InitHardwareSensor::~InitHardwareSensor()
 {
+}
+
+void InitHardwareSensor::SetConfigurationIdentity(string fileName) {
+	aSSCentralProcessingVideo->aSSFaceIdentify->SetConfiguration(fileName);
+	aSSCentralProcessingVideo->aSSFaceIdentify->InitDatabase();
 }
 
 void InitHardwareSensor::SetFileconfigurationDetect(string fileName)

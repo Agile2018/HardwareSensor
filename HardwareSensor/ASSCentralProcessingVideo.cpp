@@ -5,8 +5,10 @@ ASSCentralProcessingVideo::ASSCentralProcessingVideo()
 	aSSCheckHardware->GetSystemTimesAddress();
 	//InitParamsDetect();
 	ObserverError();
+	ObserverTemplateImage();
 	manageLogHardware->SetNameFile(LOG_HARDWARE_CONSUMPTION);
 	manageDetailProcessor->SetNameFile(LOG_INFO_PROCESSOR);
+	
 	//ObserverTemplate();
 }
 
@@ -24,12 +26,64 @@ void ASSCentralProcessingVideo::ObserverError()
 		cout << message << endl;
 		
 	});
+
+	auto faceErrorIdentify = aSSFaceIdentify->observableError.map([](string message) {
+		return message;
+	});
+
+	auto subscriptionErrorIdentify = faceErrorIdentify.subscribe([this](string message) {
+		cout << message << endl;
+
+	});
+}
+
+void ASSCentralProcessingVideo::ObserverTemplateImage()
+{
+	auto templateObservable = aSSFaceDetect->observableTemplate.map([](ASSModel* modelImage) {
+		return modelImage;
+	});
+
+	auto subscriptionTemplate = templateObservable.subscribe([this](ASSModel* modelImage) {
+		std::thread(&ASSCentralProcessingVideo::Identify, this, modelImage).detach();
+
+		/*int errorCode;
+		void* faceHandler;
+		errorCode = IFACE_CreateFaceHandler(&faceHandler);
+		int majorVersion0, minorVersion0, majorVersion1, minorVersion1, quality0, quality1;
+		errorCode = IFACE_GetTemplateInfo(faceHandler, modelImage->GetTemplate(), &majorVersion0, &minorVersion0, &quality0);
+		std::cout << "First template version: " << majorVersion0 << "." << minorVersion0 << ", quality: " << quality0
+			<< ", size: " << modelImage->GetSize() << endl;*/
+
+	});
 }
 
 void ASSCentralProcessingVideo::SetTimeLogs() {
 	string date = GetTimeInitProcess();
 	manageLogHardware->WriteFile(date);
 	aSSFaceDetect->InitDateLogs(date);
+	aSSFaceIdentify->InitDateLog(date);
+}
+
+void ASSCentralProcessingVideo::Identify(ASSModel* modelImage) {
+	aSSFaceIdentify->Identify(modelImage);
+	/*int userID = 0;
+	int score = 0;
+	int result = 0;
+	const unsigned char* templateData = reinterpret_cast<const unsigned char*>(modelImage->GetTemplate());
+	result = identify(templateData, modelImage->GetSize(), &userID, &score);
+	cout << "identify result " << result << ", userID " << userID << ",score " << score << endl;
+	if (userID == 0) {
+		result = addUserToDatabase(templateData, modelImage->GetSize(), &userID);
+		cout << "addUserToDatabase result " << result << ", userId " << userID << endl;
+	}
+	else
+	{
+		result = addTemplateToUserInDatabase(templateData, modelImage->GetSize(), userID);
+		cout << "addTemplateToUserInDatabase result " << result << ", userId " << userID << endl;
+	}*/
+	/*int number = 0;
+	getNumberOfUsers(&number);
+	cout << "Number of users " << number << endl;*/
 }
 
 string ASSCentralProcessingVideo::GetTimeInitProcess() {
@@ -157,6 +211,7 @@ void ASSCentralProcessingVideo::SetDirectory(string directory) {
 	manageLogHardware->SetNameDirectory(_directory);
 	manageDetailProcessor->SetNameDirectory(_directory);
 	aSSFaceDetect->SetDirectory(_directory);
+	aSSFaceIdentify->SetDirectory(_directory);
 }
 
 void ASSCentralProcessingVideo::SetOptionDetection(int option) {

@@ -6,6 +6,7 @@ ASSFaceDetect::ASSFaceDetect()
 	manageFileError->SetNameFile(FILE_ERROR);
 	manageLogDetailImage->SetNameFile(LOG_DETECTION_SIMPLE);
 	manageLogBachDetection->SetNameFile(LOG_DETECTION_BATCH);
+	ObserverError();
 }
 
 ASSFaceDetect::~ASSFaceDetect()
@@ -386,10 +387,14 @@ void ASSFaceDetect::GetModelBatch(int countDetect, void* facesDetect[BATCH_SIZE]
 	if (errorCode != IFACE_OK) {
 		aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);
 	}
-	/*for (int i = 0; i < countDetect; i++)
+	for (int i = 0; i < countDetect; i++)
 	{
-		templateOut.on_next(batchTemplates[i]);
-	}*/
+		ASSModel* model = new ASSModel();
+		model->SetTemplate(batchTemplates[i]);
+		model->SetSize(templateBatchDataSize);
+
+		templateOut.on_next(model);
+	}
 
 	for (int i = 0; i < BATCH_SIZE; ++i)
 	{
@@ -517,7 +522,11 @@ int ASSFaceDetect::CreateTemplate(void* face) {
 		}
 		else
 		{
-			//templateOut.on_next(templateData);
+			ASSModel* model = new ASSModel();
+			model->SetTemplate(templateData);
+			model->SetSize(templateSize);
+
+			templateOut.on_next(model);
 			
 			errorCode = IFACE_GetTemplateInfo(faceHandler, templateData, &majorVersion0, &minorVersion0, &quality0);
 			aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);

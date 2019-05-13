@@ -8,6 +8,8 @@
 #include "ASSFaceDetect.h"
 #include "ASSFaceEither.h"
 #include "ASSVideoConfig.h"
+//#include "faceidkitlib.h"
+#include "ASSFaceIdentify.h"
 #include "ASSCuda.h"
 #include <ctime>
 #include <iomanip>
@@ -23,6 +25,7 @@ public:
 	~ASSCentralProcessingVideo();	
 	ASSFaceDetect* aSSFaceDetect = new ASSFaceDetect();
 	ASSVideoConfig* aSSVideoConfig = new ASSVideoConfig();
+	ASSFaceIdentify* aSSFaceIdentify = new ASSFaceIdentify();
 	void RunProcessVideo();
 	void SetDirectory(string directory);
 	void SetOptionDetection(int option);
@@ -38,6 +41,8 @@ private:
 	//Rx::subscriber<char*> templateOut = templateImage.get_subscriber();
 	Rx::subscriber<Mat> frameOut = frame.get_subscriber();
 	void ObserverError();
+	void ObserverTemplateImage();
+	void Identify(ASSModel* modelImage);
 	string GetTimeInitProcess();
 	void SetTimeLogs();
 	//void ObserverTemplate();

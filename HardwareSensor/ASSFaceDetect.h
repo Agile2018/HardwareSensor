@@ -6,6 +6,7 @@
 #include "Measurement.h"
 #include "Image.h"
 #include "Lot.h"
+#include "ASSModel.h"
 #include <map>
 #include <json\json.h>
 #include <sstream> 
@@ -55,8 +56,8 @@ public:
 	void SetDirectory(string directory);
 	Rx::subject<string> errorFace;
 	Rx::observable<string> observableError = errorFace.get_observable();
-	/*Rx::subject<char*> templateImage;
-	Rx::observable<char*> observableTemplate = templateImage.get_observable();*/
+	Rx::subject<ASSModel*> templateImage;
+	Rx::observable<ASSModel*> observableTemplate = templateImage.get_observable();
 private:
 	ManageFile* manageFileError = new ManageFile();
 	ManageFile* manageLogDetailImage = new ManageFile();
@@ -69,7 +70,7 @@ private:
 	string GetConfig(string nameFile);
 	int _maxDetect = MAX_DETECT;
 	Rx::subscriber<string> shootError = errorFace.get_subscriber();
-	//Rx::subscriber<char*> templateOut = templateImage.get_subscriber();
+	Rx::subscriber<ASSModel*> templateOut = templateImage.get_subscriber();
 	int GetModel(unsigned char* rawImage, int width, int height);
 	int minEyeDistance = MIN_EYE_DISTANCE;
 	int maxEyeDistance = MAX_EYE_DISTANCE;

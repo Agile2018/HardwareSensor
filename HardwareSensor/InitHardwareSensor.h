@@ -12,6 +12,7 @@ public:
 	ASSCentralProcessingVideo* aSSCentralProcessingVideo = new ASSCentralProcessingVideo();
 	void SetFileconfigurationDetect(string fileName);
 	void SetConfigurationVideo(string fileName);
+	void SetConfigurationIdentity(string fileName);
 	void RunProcessVideo();
 
 private:

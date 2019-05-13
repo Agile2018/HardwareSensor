@@ -29,6 +29,7 @@ void GetIndicatorsVideo1(int detection, int cpu) {
 	InitHardwareSensor* initHardwareSensor = new InitHardwareSensor(detection, cpu);
 	initHardwareSensor->SetConfigurationVideo("video1.txt");
 	initHardwareSensor->SetFileconfigurationDetect("detect1.txt");
+	initHardwareSensor->SetConfigurationIdentity("identify1.txt");
 	std::thread sv1(GetDetailHardware, initHardwareSensor);
 	sv1.detach();
 
