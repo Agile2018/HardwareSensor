@@ -37,6 +37,46 @@ void ASSInitLibRecognition::SetParams(bool cuda) {
 	
 }
 
+void ASSInitLibRecognition::SetConfigurationIdentify(string nameFile)
+{
+	int errorCode;
+	string stringOfConfiguration = GetConfiguration(nameFile);
+	//cout << "Configuration Identify: " << stringOfConfiguration << endl;
+	if (!stringOfConfiguration.empty())
+	{
+		errorCode = faceid_init_library(stringOfConfiguration.c_str());
+		if (errorCode != IFACE_OK) {
+			aSFaceError->CheckError(errorCode, aSFaceError->ErrorFace::log);
+		}
+	}
+}
+
+void ASSInitLibRecognition::InitDatabase()
+{
+	connectToDatabase("type=memory");
+	clearDatabase();
+}
+
+string ASSInitLibRecognition::GetConfiguration(string nameFile)
+{
+	string config;
+	ifstream inconfig;
+	inconfig.open(nameFile);
+	if (inconfig.good()) {
+		stringstream strStream;
+		strStream << inconfig.rdbuf();
+		config = strStream.str();
+		inconfig.close();
+	}
+	else {
+		string msg = "File configuration not found";
+		aSFaceError->CheckError(ASSFACE_ERROR_FILE, msg, aSFaceError->ErrorFace::out);
+
+	}
+	return config;
+}
+
+
 bool ASSInitLibRecognition::InitCuda() {
 	int errorCode;
 	errorCode = IFACE_SetParam(nullptr,

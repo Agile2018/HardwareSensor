@@ -4,7 +4,7 @@
 //#include "pch.h"
 #include <iostream>
 #include "InitHardwareSensor.h"
-
+#include "ASSInitLibRecognition.h"
 
 string GetConfig(string nameFile) {
 	string config;
@@ -49,6 +49,7 @@ void GetIndicatorsVideo2(int detection, int cpu) {
 	InitHardwareSensor* initHardwareSensor = new InitHardwareSensor(detection, cpu);
 	initHardwareSensor->SetConfigurationVideo("video2.txt");
 	initHardwareSensor->SetFileconfigurationDetect("detect2.txt");
+	initHardwareSensor->SetConfigurationIdentity("identify2.txt");
 	std::thread sv1(GetDetailHardware, initHardwareSensor);
 	sv1.detach();
 
@@ -68,6 +69,7 @@ void GetIndicatorsVideo3(int detection, int cpu) {
 	InitHardwareSensor* initHardwareSensor = new InitHardwareSensor(detection, cpu);
 	initHardwareSensor->SetConfigurationVideo("video3.txt");
 	initHardwareSensor->SetFileconfigurationDetect("detect3.txt");
+	initHardwareSensor->SetConfigurationIdentity("identify3.txt");
 	std::thread sv1(GetDetailHardware, initHardwareSensor);
 	sv1.detach();
 
@@ -87,6 +89,7 @@ void GetIndicatorsVideo4(int detection, int cpu) {
 	InitHardwareSensor* initHardwareSensor = new InitHardwareSensor(detection, cpu);
 	initHardwareSensor->SetConfigurationVideo("video4.txt");
 	initHardwareSensor->SetFileconfigurationDetect("detect4.txt");
+	initHardwareSensor->SetConfigurationIdentity("identify4.txt");
 	std::thread sv1(GetDetailHardware, initHardwareSensor);
 	sv1.detach();
 
@@ -129,6 +132,25 @@ void ShootFourVideo(int detection, int cpu) {
 	sv4.join();
 }
 
+void InitLibaryFace(int cpu) {
+	ASSInitLibRecognition* aSSInitLibRecognition = new ASSInitLibRecognition();
+	bool cuda = false;
+	if (cpu == 2) cuda = true;
+	aSSInitLibRecognition->SetParams(cuda);
+	aSSInitLibRecognition->InitLib();
+	if (!cuda)
+	{
+		cout << "CUDA NOT SELECTED" << endl;
+	}
+	else
+	{
+		cout << "CUDA SELECTED" << endl;
+	}
+
+	/*aSSInitLibRecognition->SetConfigurationIdentify("identify.txt");
+	aSSInitLibRecognition->InitDatabase();*/
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -143,6 +165,7 @@ int main(int argc, char* argv[])
 
 		if ((detection == 1 || detection == 2) && (cpu == 1 || cpu == 2))
 		{
+			InitLibaryFace(cpu);
 			string devices = GetConfig("devices.txt");
 			switch (devices[0])
 			{

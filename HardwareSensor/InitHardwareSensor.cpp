@@ -2,10 +2,10 @@
 
 InitHardwareSensor::InitHardwareSensor(int detection, int cpu)
 {
-	bool cuda = false;
+	/*bool cuda = false;
 	if (cpu == 2) cuda = true;
 	aSSInitLibRecognition->SetParams(cuda);
-	aSSInitLibRecognition->InitLib();
+	aSSInitLibRecognition->InitLib();*/
 	aSSCentralProcessingVideo->SetOptionDetection(detection);
 	if (detection == 1)
 	{
@@ -15,14 +15,14 @@ InitHardwareSensor::InitHardwareSensor(int detection, int cpu)
 	{
 		cout << "BATCH DETECTION ENABLE" << endl;
 	}
-	if (!cuda)
-	{
-		cout << "CUDA NOT SELECTED" << endl;
-	}
-	else
-	{
-		cout << "CUDA SELECTED" << endl;
-	}
+	//if (!cuda)
+	//{
+	//	cout << "CUDA NOT SELECTED" << endl;
+	//}
+	//else
+	//{
+	//	cout << "CUDA SELECTED" << endl;
+	//}
 
 }
 

@@ -1,6 +1,6 @@
 #ifndef InitHardwareSensor_h
 #define InitHardwareSensor_h
-#include "ASSInitLibRecognition.h"
+//#include "ASSInitLibRecognition.h"
 #include "ASSCentralProcessingVideo.h"
 #include "ManageFile.h"
 
@@ -17,7 +17,7 @@ public:
 
 private:
 	ManageFile* manageDirectory = new ManageFile();
-	ASSInitLibRecognition* aSSInitLibRecognition = new ASSInitLibRecognition();
+	/*ASSInitLibRecognition* aSSInitLibRecognition = new ASSInitLibRecognition();*/
 
 };
 
